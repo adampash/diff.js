@@ -5,9 +5,17 @@ A small JavaScript tool to do word-by-word diffs two strings of text.
 
 Usage
 ======
+
+### In the browser
 Include diff.js in your page, then run:
 
 ```javascript
+Diff.parse(string1, string2);
+```
+
+### In Node
+```javascript
+var Diff = require('./js/diff.js').Diff;
 Diff.parse(string1, string2);
 ```
 
