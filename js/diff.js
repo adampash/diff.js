@@ -1,5 +1,6 @@
+;(function (exports) {
 
-var Diff = {
+  var Diff = {
   parse: function(old_string, new_string) {
     old_string = this.prepare_text(old_string);
     new_string = this.prepare_text(new_string);
@@ -11,7 +12,7 @@ var Diff = {
     // pass arrays of new and old words to diff method
     // diff method returns output of the diff
     var diff_output = this.diff(old_words, new_words);
-    console.log(diff_output);
+    // console.log(diff_output);
     var str = "";
 
     // find all of the spaces in the previous string
@@ -86,7 +87,7 @@ var Diff = {
 
     // str = merge_adjacent(str, ['del', 'ins'])
     // str = str.replace(/&ltt;/g, "wtf").replace(/&gtt;/g, "wtfrighte");
-    console.log(str);
+    // console.log(str);
     return str;
 
   },
@@ -176,13 +177,13 @@ var Diff = {
   },
 
   build_word_index: function(words_array) {
-    var wordsIndex = new Object();
+    var words_index = new Object();
     for ( var i = 0; i < words_array.length; i++ ) {
-      if ( wordsIndex[ words_array[i] ] == null )
-        wordsIndex[ words_array[i] ] = { rows: new Array(), o: null };
-      wordsIndex[ words_array[i] ].rows.push( i );
+      if ( words_index[ words_array[i] ] == null )
+        words_index[ words_array[i] ] = { rows: new Array(), o: null };
+      words_index[ words_array[i] ].rows.push( i );
     }
-    return wordsIndex;
+    return words_index;
   },
 
   prepare_text: function(string) {
@@ -203,3 +204,8 @@ var Diff = {
     return string.replace(link_re, '$spacebar$');
   }
 }
+
+
+  exports.Diff = Diff
+
+}(typeof exports === 'undefined' ? this : exports));
