@@ -177,10 +177,10 @@
   },
 
   build_word_index: function(words_array) {
-    var words_index = new Object();
+    var words_index = {};
     for ( var i = 0; i < words_array.length; i++ ) {
       if ( words_index[ words_array[i] ] == null )
-        words_index[ words_array[i] ] = { rows: new Array(), o: null };
+        words_index[ words_array[i] ] = { rows: [], o: null };
       words_index[ words_array[i] ].rows.push( i );
     }
     return words_index;
