@@ -12,7 +12,7 @@
       // pass arrays of new and old words to diff method
       // diff method returns output of the diff
       var diff_output = this.diff(old_words, new_words);
-      // console.log(diff_output);
+
       var str = "";
 
       // find all of the spaces in the previous string
