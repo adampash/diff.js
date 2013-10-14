@@ -83,6 +83,22 @@
     }
   };
 
+  var diff =  function(old_words, new_words) {
+    var diff = {
+      old_words: old_words,
+      new_words: new_words
+    };
+
+    connectUnchangedWords(diff);
+    chainMatchingWords(diff);
+    diff.old_words.reverse();
+    diff.new_words.reverse();
+    chainMatchingWords(diff);
+    diff.old_words.reverse();
+    diff.new_words.reverse();
+    return diff;
+  };
+
   var differ = {
     parse: function(oldString, newString) {
       oldString = this.prepare_text(oldString);
@@ -94,7 +110,7 @@
 
       // pass arrays of new and old words to diff method
       // diff method returns output of the diff
-      var diff_output = this.diff(old_words, new_words);
+      var diff_output = diff(old_words, new_words);
 
       var str = "";
 
@@ -157,22 +173,6 @@
       }
 
       return str;
-    },
-
-    diff: function(old_words, new_words) {
-      var diff = {
-        old_words: old_words,
-        new_words: new_words
-      };
-
-      connectUnchangedWords(diff);
-      chainMatchingWords(diff);
-      diff.old_words.reverse();
-      diff.new_words.reverse();
-      chainMatchingWords(diff);
-      diff.old_words.reverse();
-      diff.new_words.reverse();
-      return diff;
     },
 
     prepare_text: function(string) {
