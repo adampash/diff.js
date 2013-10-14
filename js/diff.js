@@ -69,22 +69,19 @@
     // this step is essentially trying to find
     // the best string of matches when a word
     // has been used more than once
-    for ( var i = 0; i < diff.new_words.length - 1; i++ ) {
-      if (
-        word.exists(diff.new_words, i)
-        && !word.exists(diff.new_words, i + 1) // and the next word is so-far unmatched
-        // and we haven't passed the end of the diff.old_words
-        && diff.new_words[i].row + 1 < diff.old_words.length
-        && !word.exists(old_words, diff.new_words[i].row + 1)
-        // and the next word is the same in the diff.old_words
-        && diff.new_words[i + 1] == diff.old_words[ diff.new_words[i].row + 1 ]
-      )
-      {
+    diff.new_words.forEach(function(newWord, i) {
+      if (word.exists(diff.new_words, i)
+          && !word.exists(diff.new_words, i + 1) // and the next word is so-far unmatched
+          // and we haven't passed the end of the diff.old_words
+          && newWord.row + 1 < diff.old_words.length
+          && !word.exists(diff.old_words, newWord.row + 1)
+          // and the next word is the same in the diff.old_words
+          && diff.new_words[i + 1] == diff.old_words[ newWord.row + 1 ]) {
         // chain current word to next in diff.new_words and diff.old_words
-        word.connect(diff.new_words, i + 1, diff.new_words[i].row + 1);
-        word.connect(diff.old_words, diff.new_words[i].row + 1, i + 1);
+        word.connect(diff.new_words, i + 1, newWord.row + 1);
+        word.connect(diff.old_words, newWord.row + 1, i + 1);
       }
-    }
+    });
   };
 
   var diff =  function(old_words, new_words) {
