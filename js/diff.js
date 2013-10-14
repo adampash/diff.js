@@ -179,13 +179,11 @@
     },
 
     build_word_index: function(words_array) {
-      var words_index = {};
-      for ( var i = 0; i < words_array.length; i++ ) {
-        if ( words_index[ words_array[i] ] == null )
-          words_index[ words_array[i] ] = { rows: [], o: null };
-        words_index[ words_array[i] ].rows.push( i );
-      }
-      return words_index;
+      return words_array.reduce(function(a, x, i) {
+        a[x] = a[x] || { rows: [], o: null };
+        a[x].rows.push(i);
+        return a;
+      }, {});
     },
 
     prepare_text: function(string) {
