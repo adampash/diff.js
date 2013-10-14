@@ -18,6 +18,12 @@
     }
   };
 
+  var retrieve = function(obj, keys) {
+    return keys.reduce(function(a, x) {
+      return a && a[x];
+    }, obj);
+  };
+
   var differ = {
     parse: function(oldString, newString) {
       oldString = this.prepare_text(oldString);
@@ -106,11 +112,9 @@
       for ( var i in new_hash ) {
         if (
           // word only occurs once in new_hash
-          new_hash[i].rows.length == 1
-          // and this key points to an object in the old_hash
-          && typeof(old_hash[i]) != "undefined"
+          retrieve(new_hash, [i, "rows", "length"]) === 1
           // and the word also only occurs once in the old_hash
-          && old_hash[i].rows.length == 1
+          && retrieve(old_hash, [i, "rows", "length"]) === 1
         ) {
           // assume these words are unchanged matches;
           // make the new_words and old_words arrays
@@ -204,6 +208,8 @@
       return string.replace(link_re, '$spacebar$'); // should you put spaces back after diff?
     }
   }
+
+
 
 
   exports.differ = differ
