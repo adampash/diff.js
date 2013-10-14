@@ -32,6 +32,20 @@
     }, {});
   };
 
+  var word = {
+    frequency: function(wordHash, word) {
+      return retrieve(wordHash, [word, "rows", "length"])
+    },
+
+    connect: function(words, row, connectedRow) {
+      words[row] = { text: words[row], row: connectedRow };
+    },
+
+    exists: function(words, index) {
+      return words[index].text !== null;
+    }
+  };
+
   var connectUnchangedWords = function(diff) {
     var old_hash = build_word_index(diff.old_words);
     var new_hash = build_word_index(diff.new_words);
@@ -42,17 +56,10 @@
     // arrays that contains the index of that word in the other array
     // along with the text of the word
     for ( var i in new_hash ) {
-      if (
-        // word only occurs once in new_hash
-        retrieve(new_hash, [i, "rows", "length"]) === 1
-        // and the word also only occurs once in the old_hash
-          && retrieve(old_hash, [i, "rows", "length"]) === 1
-      ) {
-        // assume these words are unchanged matches;
-        // make the diff.new_words and diff.old_words arrays
-        // point at each other
-        diff.new_words[ new_hash[i].rows[0] ] = { text: diff.new_words[ new_hash[i].rows[0] ], row: old_hash[i].rows[0] };
-        diff.old_words[ old_hash[i].rows[0] ] = { text: diff.old_words[ old_hash[i].rows[0] ], row: new_hash[i].rows[0] };
+      if (word.frequency(new_hash, i) === 1 && word.frequency(old_hash, i) === 1) {
+        // assume these words are unchanged matches
+        word.connect(diff.new_words, new_hash[i].rows[0], old_hash[i].rows[0]);
+        word.connect(diff.old_words, old_hash[i].rows[0], new_hash[i].rows[0]);
       }
     }
   };
@@ -64,21 +71,18 @@
     // has been used more than once
     for ( var i = 0; i < diff.new_words.length - 1; i++ ) {
       if (
-        // if this word exists in the diff.old_words
-        diff.new_words[i].text != null
-        // and the next word is so-far unmatched
-        && diff.new_words[i + 1].text == null
+        word.exists(diff.new_words, i)
+        && !word.exists(diff.new_words, i + 1) // and the next word is so-far unmatched
         // and we haven't passed the end of the diff.old_words
         && diff.new_words[i].row + 1 < diff.old_words.length
-        // and the next word in the diff.old_words is not yet matched
-        && diff.old_words[ diff.new_words[i].row + 1 ].text == null
+        && !word.exists(old_words, diff.new_words[i].row + 1)
         // and the next word is the same in the diff.old_words
         && diff.new_words[i + 1] == diff.old_words[ diff.new_words[i].row + 1 ]
       )
       {
         // chain current word to next in diff.new_words and diff.old_words
-        diff.new_words[i + 1] = { text: diff.new_words[i + 1], row: diff.new_words[i].row + 1 };
-        diff.old_words[diff.new_words[i].row + 1] = { text: diff.old_words[diff.new_words[i].row + 1], row: i + 1 };
+        word.connect(diff.new_words, i + 1, diff.new_words[i].row + 1);
+        word.connect(diff.old_words, diff.new_words[i].row + 1, i + 1);
       }
     }
   };
