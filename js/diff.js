@@ -1,5 +1,13 @@
 ;(function (exports) {
 
+  var spaces = function(str) {
+    var spaces = str.match(/\s+/g);
+    if (spaces == null) {
+      spaces = [];
+    }
+    return spaces.concat("\n");
+  };
+
   var differ = {
     parse: function(oldString, newString) {
       oldString = this.prepare_text(oldString);
@@ -18,20 +26,8 @@
       // find all of the spaces in the previous string
       // so we can reassemble the words as they were
       // (doesn't seem all the necessary for HTML)
-      var old_spaces = oldString.match(/\s+/g);
-      if (old_spaces == null) {
-        old_spaces = ["\n"];
-      }
-      else {
-        old_spaces.push("\n");
-      }
-      var new_spaces = newString.match(/\s+/g);
-      if (new_spaces == null) {
-        new_spaces = ["\n"];
-      }
-      else {
-        new_spaces.push("\n");
-      }
+      var old_spaces = spaces(oldString);
+      var new_spaces = spaces(newString);
 
       // if the newString was empty,
       // strike out everything from the oldString
