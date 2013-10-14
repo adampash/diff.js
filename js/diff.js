@@ -91,11 +91,7 @@
         }
       }
 
-      // str = merge_adjacent(str, ['del', 'ins'])
-      // str = str.replace(/&ltt;/g, "wtf").replace(/&gtt;/g, "wtfrighte");
-      // console.log(str);
       return str;
-
     },
 
     diff: function(old_words, new_words) {
