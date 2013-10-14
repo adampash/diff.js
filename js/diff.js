@@ -1,6 +1,6 @@
 ;(function (exports) {
 
-  var Diff = {
+  var differ = {
     parse: function(old_string, new_string) {
       old_string = this.prepare_text(old_string);
       new_string = this.prepare_text(new_string);
@@ -206,6 +206,6 @@
   }
 
 
-  exports.Diff = Diff
+  exports.differ = differ
 
 }(typeof exports === 'undefined' ? this : exports));
