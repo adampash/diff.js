@@ -8,6 +8,16 @@
     return spaces.concat("\n");
   };
 
+  var markup = {
+    deleted: function(str) {
+      return '$del$' + escape(str) + "$/del$";
+    },
+
+    inserted: function(str) {
+      return '$ins$' + escape(str) + "$/ins$";
+    }
+  };
+
   var differ = {
     parse: function(oldString, newString) {
       oldString = this.prepare_text(oldString);
@@ -33,7 +43,7 @@
       // strike out everything from the oldString
       if (diff_output.new_words.length == 0) {
         for (var i = 0; i < diff_output.old_words.length; i++) {
-          str += '$del$' + escape(diff_output.old_words[i]) + "$/del$" + old_spaces[i];
+          str += markup.deleted(escape(diff_output.old_words[i])) + old_spaces[i];
         }
       }
       // assemble the diffed string by stitching together
@@ -51,7 +61,7 @@
         {
           // surround those words w/delete indicators/tags and
           // add back its spaces
-          str += '$del$' + escape(diff_output.old_words[n]) + old_spaces[n] + "$/del$";
+          str += markup.deleted(escape(diff_output.old_words[n]) + old_spaces[n]);
         }
 
         // for all words in the newString
@@ -60,7 +70,7 @@
           if (diff_output.new_words[i].text == null) {
             // surround the word w/insert indicators/tags
             // and add back its spaces
-            str += '$ins$' + escape(diff_output.new_words[i]) + "$/ins$" + new_spaces[i];
+            str += markup.inserted(escape(diff_output.new_words[i])) + new_spaces[i];
           }
           // if the word did match with the oldString
           else {
@@ -74,7 +84,7 @@
                 )
             {
 
-              pre += '$del$' + escape(diff_output.old_words[n]) + "$/del$" + old_spaces[n];
+              pre += markup.deleted(escape(diff_output.old_words[n])) + old_spaces[n];
             }
             str += " " + diff_output.new_words[i].text + new_spaces[i] + pre;
           }
