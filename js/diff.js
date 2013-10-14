@@ -32,6 +32,31 @@
     }, {});
   };
 
+  var connectUnchangedWords = function(diff) {
+    var old_hash = build_word_index(diff.old_words);
+    var new_hash = build_word_index(diff.new_words);
+
+    // for each word in the new text
+    // when the word appears in only once in both hashes
+    // add a new object to the diff.new_words and diff.old_words
+    // arrays that contains the index of that word in the other array
+    // along with the text of the word
+    for ( var i in new_hash ) {
+      if (
+        // word only occurs once in new_hash
+        retrieve(new_hash, [i, "rows", "length"]) === 1
+        // and the word also only occurs once in the old_hash
+          && retrieve(old_hash, [i, "rows", "length"]) === 1
+      ) {
+        // assume these words are unchanged matches;
+        // make the diff.new_words and diff.old_words arrays
+        // point at each other
+        diff.new_words[ new_hash[i].rows[0] ] = { text: diff.new_words[ new_hash[i].rows[0] ], row: old_hash[i].rows[0] };
+        diff.old_words[ old_hash[i].rows[0] ] = { text: diff.old_words[ old_hash[i].rows[0] ], row: new_hash[i].rows[0] };
+      }
+    }
+  };
+
   var differ = {
     parse: function(oldString, newString) {
       oldString = this.prepare_text(oldString);
@@ -114,28 +139,7 @@
         new_words: new_words
       };
 
-      var old_hash = build_word_index(diff.old_words);
-      var new_hash = build_word_index(diff.new_words);
-
-      // for each word in the new text
-      // when the word appears in only once in both hashes
-      // add a new object to the diff.new_words and diff.old_words
-      // arrays that contains the index of that word in the other array
-      // along with the text of the word
-      for ( var i in new_hash ) {
-        if (
-          // word only occurs once in new_hash
-          retrieve(new_hash, [i, "rows", "length"]) === 1
-          // and the word also only occurs once in the old_hash
-            && retrieve(old_hash, [i, "rows", "length"]) === 1
-        ) {
-          // assume these words are unchanged matches;
-          // make the diff.new_words and diff.old_words arrays
-          // point at each other
-          diff.new_words[ new_hash[i].rows[0] ] = { text: diff.new_words[ new_hash[i].rows[0] ], row: old_hash[i].rows[0] };
-          diff.old_words[ old_hash[i].rows[0] ] = { text: diff.old_words[ old_hash[i].rows[0] ], row: new_hash[i].rows[0] };
-        }
-      }
+      connectUnchangedWords(diff);
 
       // try to find consecutive matching words.
       // this step is essentially trying to find
