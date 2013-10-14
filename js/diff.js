@@ -122,7 +122,7 @@
 
       // if the newString was empty,
       // strike out everything from the oldString
-      if (diff_output.new_words.length == 0) {
+      if (diff_output.new_words.length == 0) { // why is there a special case for length 0?
         for (var i = 0; i < diff_output.old_words.length; i++) {
           str += markup.deleted(escape(diff_output.old_words[i])) + old_spaces[i];
         }
