@@ -24,6 +24,14 @@
     }, obj);
   };
 
+  var build_word_index = function(words_array) {
+    return words_array.reduce(function(a, x, i) {
+      a[x] = a[x] || { rows: [], o: null };
+      a[x].rows.push(i);
+      return a;
+    }, {});
+  };
+
   var differ = {
     parse: function(oldString, newString) {
       oldString = this.prepare_text(oldString);
@@ -101,8 +109,8 @@
     },
 
     diff: function(old_words, new_words) {
-      var old_hash = this.build_word_index(old_words);
-      var new_hash = this.build_word_index(new_words);
+      var old_hash = build_word_index(old_words);
+      var new_hash = build_word_index(new_words);
 
       // for each word in the new text
       // when the word appears in only once in both hashes
@@ -180,14 +188,6 @@
 
       return { old_words: old_words, new_words: new_words };
 
-    },
-
-    build_word_index: function(words_array) {
-      return words_array.reduce(function(a, x, i) {
-        a[x] = a[x] || { rows: [], o: null };
-        a[x].rows.push(i);
-        return a;
-      }, {});
     },
 
     prepare_text: function(string) {
