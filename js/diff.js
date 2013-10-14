@@ -159,9 +159,7 @@
           && diff.new_words[i + 1] == diff.old_words[ diff.new_words[i].row + 1 ]
           )
         {
-          // assume these next words are unchanged matches;
-          // make the diff.new_words and diff.old_words arrays
-          // point at each other
+          // chain current word to next in diff.new_words and diff.old_words
           diff.new_words[i + 1] = { text: diff.new_words[i + 1], row: diff.new_words[i].row + 1 };
           diff.old_words[diff.new_words[i].row + 1] = { text: diff.old_words[diff.new_words[i].row + 1], row: i + 1 };
         }
@@ -187,9 +185,7 @@
           && diff.new_words[i - 1] == diff.old_words[ diff.new_words[i].row - 1 ]
           )
         {
-          // assume these next words are unchanged matches;
-          // make the diff.new_words and diff.old_words arrays
-          // point at each other
+          // chain current word to next in diff.new_words and diff.old_words
           diff.new_words[i-1] = { text: diff.new_words[i-1], row: diff.new_words[i].row - 1 };
           diff.old_words[diff.new_words[i].row-1] = { text: diff.old_words[diff.new_words[i].row-1], row: i - 1 };
         }
