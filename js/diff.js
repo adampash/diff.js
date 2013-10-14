@@ -100,17 +100,15 @@
   };
 
   var differ = {
+    stringToWords: function(str) {
+      str = this.prepare_text(str);
+      return str == "" ? [] : str.split(/\s+/);
+    },
+
     parse: function(oldString, newString) {
-      oldString = this.prepare_text(oldString);
-      newString = this.prepare_text(newString);
-
-      // split each string into an array of individual words
-      var old_words = oldString == "" ? [] : oldString.split(/\s+/)
-      var new_words = newString == "" ? [] : newString.split(/\s+/)
-
       // pass arrays of new and old words to diff method
       // diff method returns output of the diff
-      var diff_output = diff(old_words, new_words);
+      var diff_output = diff(this.stringToWords(oldString), this.stringToWords(newString));
 
       var str = "";
 
