@@ -1,13 +1,13 @@
 ;(function (exports) {
 
   var differ = {
-    parse: function(old_string, new_string) {
-      old_string = this.prepare_text(old_string);
-      new_string = this.prepare_text(new_string);
+    parse: function(oldString, newString) {
+      oldString = this.prepare_text(oldString);
+      newString = this.prepare_text(newString);
 
       // split each string into an array of individual words
-      var old_words = old_string == "" ? [] : old_string.split(/\s+/)
-      var new_words = new_string == "" ? [] : new_string.split(/\s+/)
+      var old_words = oldString == "" ? [] : oldString.split(/\s+/)
+      var new_words = newString == "" ? [] : newString.split(/\s+/)
 
       // pass arrays of new and old words to diff method
       // diff method returns output of the diff
@@ -18,14 +18,14 @@
       // find all of the spaces in the previous string
       // so we can reassemble the words as they were
       // (doesn't seem all the necessary for HTML)
-      var old_spaces = old_string.match(/\s+/g);
+      var old_spaces = oldString.match(/\s+/g);
       if (old_spaces == null) {
         old_spaces = ["\n"];
       }
       else {
         old_spaces.push("\n");
       }
-      var new_spaces = new_string.match(/\s+/g);
+      var new_spaces = newString.match(/\s+/g);
       if (new_spaces == null) {
         new_spaces = ["\n"];
       }
@@ -33,15 +33,15 @@
         new_spaces.push("\n");
       }
 
-      // if the new_string was empty,
-      // strike out everything from the old_string
+      // if the newString was empty,
+      // strike out everything from the oldString
       if (diff_output.new_words.length == 0) {
         for (var i = 0; i < diff_output.old_words.length; i++) {
           str += '$del$' + escape(diff_output.old_words[i]) + "$/del$" + old_spaces[i];
         }
       }
       // assemble the diffed string by stitching together
-        // the old_string and the new_string.
+        // the oldString and the newString.
       else {
         // for all old_words that were deleted
         // (indicated by a lack of an object at this index)
@@ -58,15 +58,15 @@
           str += '$del$' + escape(diff_output.old_words[n]) + old_spaces[n] + "$/del$";
         }
 
-        // for all words in the new_string
+        // for all words in the newString
         for ( var i = 0; i < diff_output.new_words.length; i++ ) {
-          // if the word did not match any in the old_string
+          // if the word did not match any in the oldString
           if (diff_output.new_words[i].text == null) {
             // surround the word w/insert indicators/tags
             // and add back its spaces
             str += '$ins$' + escape(diff_output.new_words[i]) + "$/ins$" + new_spaces[i];
           }
-          // if the word did match with the old_string
+          // if the word did match with the oldString
           else {
             var pre = "";
 
