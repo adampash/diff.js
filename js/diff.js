@@ -42,7 +42,7 @@
     },
 
     exists: function(words, index) {
-      return words[index].text !== null;
+      return retrieve(words, [index, "text"]) != null;
     }
   };
 
