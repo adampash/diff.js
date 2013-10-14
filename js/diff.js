@@ -109,12 +109,17 @@
     },
 
     diff: function(old_words, new_words) {
-      var old_hash = build_word_index(old_words);
-      var new_hash = build_word_index(new_words);
+      var diff = {
+        old_words: old_words,
+        new_words: new_words
+      };
+
+      var old_hash = build_word_index(diff.old_words);
+      var new_hash = build_word_index(diff.new_words);
 
       // for each word in the new text
       // when the word appears in only once in both hashes
-      // add a new object to the new_words and old_words
+      // add a new object to the diff.new_words and diff.old_words
       // arrays that contains the index of that word in the other array
       // along with the text of the word
       for ( var i in new_hash ) {
@@ -122,13 +127,13 @@
           // word only occurs once in new_hash
           retrieve(new_hash, [i, "rows", "length"]) === 1
           // and the word also only occurs once in the old_hash
-          && retrieve(old_hash, [i, "rows", "length"]) === 1
+            && retrieve(old_hash, [i, "rows", "length"]) === 1
         ) {
           // assume these words are unchanged matches;
-          // make the new_words and old_words arrays
+          // make the diff.new_words and diff.old_words arrays
           // point at each other
-          new_words[ new_hash[i].rows[0] ] = { text: new_words[ new_hash[i].rows[0] ], row: old_hash[i].rows[0] };
-          old_words[ old_hash[i].rows[0] ] = { text: old_words[ old_hash[i].rows[0] ], row: new_hash[i].rows[0] };
+          diff.new_words[ new_hash[i].rows[0] ] = { text: diff.new_words[ new_hash[i].rows[0] ], row: old_hash[i].rows[0] };
+          diff.old_words[ old_hash[i].rows[0] ] = { text: diff.old_words[ old_hash[i].rows[0] ], row: new_hash[i].rows[0] };
         }
       }
 
@@ -136,58 +141,57 @@
       // this step is essentially trying to find
       // the best string of matches when a word
       // has been used more than once
-      for ( var i = 0; i < new_words.length - 1; i++ ) {
+      for ( var i = 0; i < diff.new_words.length - 1; i++ ) {
         if (
-          // if this word exists in the old_words
-          new_words[i].text != null
+          // if this word exists in the diff.old_words
+          diff.new_words[i].text != null
           // and the next word is so-far unmatched
-          && new_words[i + 1].text == null
-          // and we haven't passed the end of the old_words
-          && new_words[i].row + 1 < old_words.length
-          // and the next word in the old_words is not yet matched
-          && old_words[ new_words[i].row + 1 ].text == null
-          // and the next word is the same in the old_words
-          && new_words[i + 1] == old_words[ new_words[i].row + 1 ]
+          && diff.new_words[i + 1].text == null
+          // and we haven't passed the end of the diff.old_words
+          && diff.new_words[i].row + 1 < diff.old_words.length
+          // and the next word in the diff.old_words is not yet matched
+          && diff.old_words[ diff.new_words[i].row + 1 ].text == null
+          // and the next word is the same in the diff.old_words
+          && diff.new_words[i + 1] == diff.old_words[ diff.new_words[i].row + 1 ]
           )
         {
           // assume these next words are unchanged matches;
-          // make the new_words and old_words arrays
+          // make the diff.new_words and diff.old_words arrays
           // point at each other
-          new_words[i + 1] = { text: new_words[i + 1], row: new_words[i].row + 1 };
-          old_words[new_words[i].row + 1] = { text: old_words[new_words[i].row + 1], row: i + 1 };
+          diff.new_words[i + 1] = { text: diff.new_words[i + 1], row: diff.new_words[i].row + 1 };
+          diff.old_words[diff.new_words[i].row + 1] = { text: diff.old_words[diff.new_words[i].row + 1], row: i + 1 };
         }
       }
 
-      // starting at the end of the new_words,
+      // starting at the end of the diff.new_words,
       // work backwards to find new matched reverse-consecutive
       // words
-      for ( var i = new_words.length - 1; i > 0; i-- ) {
+      for ( var i = diff.new_words.length - 1; i > 0; i-- ) {
         if (
-          // this word has been matched in the old_words
-          new_words[i].text != null
+          // this word has been matched in the diff.old_words
+          diff.new_words[i].text != null
           // and the previous word has not yet been matched
-          && new_words[i - 1].text == null
+          && diff.new_words[i - 1].text == null
           // and the current matched word isn't matched with
-          // the first word of the old_words (remember that
+          // the first word of the diff.old_words (remember that
           // this is working backwards, so we don't want a
           // negative index)
-          && new_words[i].row > 0
-          // and the previous word in old_words hasn't been matched
-          && old_words[ new_words[i].row - 1 ].text == null
-          // and the previous word matches in both new_words and old_words
-          && new_words[i - 1] == old_words[ new_words[i].row - 1 ]
+          && diff.new_words[i].row > 0
+          // and the previous word in diff.old_words hasn't been matched
+          && diff.old_words[ diff.new_words[i].row - 1 ].text == null
+          // and the previous word matches in both diff.new_words and diff.old_words
+          && diff.new_words[i - 1] == diff.old_words[ diff.new_words[i].row - 1 ]
           )
         {
           // assume these next words are unchanged matches;
-          // make the new_words and old_words arrays
+          // make the diff.new_words and diff.old_words arrays
           // point at each other
-          new_words[i-1] = { text: new_words[i-1], row: new_words[i].row - 1 };
-          old_words[new_words[i].row-1] = { text: old_words[new_words[i].row-1], row: i - 1 };
+          diff.new_words[i-1] = { text: diff.new_words[i-1], row: diff.new_words[i].row - 1 };
+          diff.old_words[diff.new_words[i].row-1] = { text: diff.old_words[diff.new_words[i].row-1], row: i - 1 };
         }
       }
 
-      return { old_words: old_words, new_words: new_words };
-
+      return diff;
     },
 
     prepare_text: function(string) {
