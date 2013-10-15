@@ -10,13 +10,13 @@ Usage
 Include diff.js in your page, then run:
 
 ```javascript
-Diff.parse(string1, string2);
+differ.parse(string1, string2);
 ```
 
 ### In Node
 ```javascript
-var Diff = require('./js/diff.js').Diff;
-Diff.parse(string1, string2);
+var differ = require('./js/diff.js').differ;
+differ.parse(string1, string2);
 ```
 
 Currently this parses the text for differences and marks deletions and insertions with $del$ and $ins$ variables. I may implement custom markers for deletion and insertion, but for now, this works for what I'm using it for.
@@ -24,7 +24,7 @@ Currently this parses the text for differences and marks deletions and insertion
 E.g.
 
 ```javascript
-Diff.parse('one two three', 'two three four');
+differ.parse('one two three', 'two three four');
 // Returns '$del$one $/del$ two  three $ins$four$/ins$'
 ```
 
