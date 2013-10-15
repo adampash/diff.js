@@ -1,0 +1,3 @@
+* Condition markdown outside of function (e.g., remove $spacebar$ from lib)
+* Allow user to set custom del/ins tags
+* 

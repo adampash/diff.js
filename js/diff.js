@@ -189,7 +189,7 @@
       // we don't want to split up markup-style links
       // so we're replacing spaces
       var link_re = /\s(?=[^\[]*\])/g;
-      return string.replace(link_re, '$spacebar$'); // should you put spaces back after diff?
+      return string.replace(link_re, '$spacebar$');
     }
   }
 
