@@ -141,7 +141,7 @@
       // strike out everything from the oldString
       if (diff_output.new_words.length == 0) { // why is there a special case for length 0?
         for (var i = 0; i < diff_output.old_words.length; i++) {
-          str += markup.deleted(escape(diff_output.old_words[i]), sigil.del) + old_spaces[i];
+          str += markup.deleted((diff_output.old_words[i]), sigil.del) + old_spaces[i];
         }
       }
       // assemble the diffed string by stitching together
@@ -160,7 +160,7 @@
           // surround those words w/delete indicators/tags and
           // add back its spaces
 
-          str += markup.deleted(escape(diff_output.old_words[n]) + old_spaces[n], sigil.del);
+          str += markup.deleted((diff_output.old_words[n]) + old_spaces[n], sigil.del);
         }
 
         // for all words in the newString
@@ -169,7 +169,7 @@
           if (diff_output.new_words[i].text == null) {
             // surround the word w/insert indicators/tags
             // and add back its spaces
-            str += markup.inserted(escape(diff_output.new_words[i]), sigil.ins) + new_spaces[i];
+            str += markup.inserted((diff_output.new_words[i]), sigil.ins) + new_spaces[i];
           }
           // if the word did match with the oldString
           else {
@@ -183,7 +183,7 @@
                 )
             {
 
-              pre += markup.deleted(escape(diff_output.old_words[n]), sigil.del) + old_spaces[n];
+              pre += markup.deleted((diff_output.old_words[n]), sigil.del) + old_spaces[n];
             }
             str += " " + diff_output.new_words[i].text + new_spaces[i] + pre;
           }
