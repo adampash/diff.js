@@ -10,7 +10,3 @@ test("We don't want to split markdown links", function() {
 test("Comparing diffstring method with Diff method", function(){
   ok(differ.parse("one two three", "two three four") == diffString("one two three", "two three four"))
 });
-
-// test( "Diffing strings", function() {
-//   ok( differ.parse("foo bar baz foo", "foo baz foo bar") == "foo $del$bar$/del$ baz $del$foo$/del$", "Diffing two simple strings" );
-// });
