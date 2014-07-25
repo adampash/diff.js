@@ -12,5 +12,5 @@ test("Comparing diffstring method with Diff method", function(){
 });
 
 // test( "Diffing strings", function() {
-//   ok( Diff.parse("foo bar baz foo", "foo baz foo bar") == "foo <del>bar</del> baz <del>foo</del>", "Diffing two simple strings" );
+//   ok( differ.parse("foo bar baz foo", "foo baz foo bar") == "foo $del$bar$/del$ baz $del$foo$/del$", "Diffing two simple strings" );
 // });
