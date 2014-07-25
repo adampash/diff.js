@@ -106,7 +106,23 @@
       return str == "" ? [] : str.split(/\s+/);
     },
 
-    parse: function(oldString, newString) {
+    parse: function(oldString, newString, sigil) {
+      // set sigil defaults if not passed
+      sigil =
+      {
+        ins:
+        {
+          start: '$ins$',
+          end: '$/ins$'
+        },
+        del:
+        {
+          start: '$del$',
+          end: '$/del$'
+        },
+      };
+
+
       // pass arrays of new and old words to diff method
       // diff method returns output of the diff
       var diff_output = diff(this.stringToWords(oldString), this.stringToWords(newString));
