@@ -26,8 +26,8 @@ function diffString( o, n ) {
   var link_re = /\s(?=[^\[]*\])/g;
   o = o.replace(link_re, '$spacebar$')
   n = n.replace(link_re, '$spacebar$')
-  console.log(o);
-  console.log(n);
+  // console.log(o);
+  // console.log(n);
 
   var out = diff(o == "" ? [] : o.split(/\s+/), n == "" ? [] : n.split(/\s+/) );
   var str = "";
@@ -73,7 +73,7 @@ function diffString( o, n ) {
 
   // str = merge_adjacent(str, ['del', 'ins'])
   // str = str.replace(/&ltt;/g, "wtf").replace(/&gtt;/g, "wtfrighte");
-  console.log(str);
+  // console.log(str);
   return str;
 }
 
