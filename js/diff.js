@@ -190,6 +190,10 @@
         }
       }
 
+      str.replace(/\$spacebar\$/g, ' ')
+
+      // this.merge_adjacent('del')
+      // this.merge_adjacent('ins')
       return str;
     },
 
@@ -209,6 +213,45 @@
       // so we're replacing spaces
       var link_re = /\s(?=[^\[]*\])/g;
       return string.replace(link_re, '$spacebar$');
+    },
+
+
+    merge_adjacent: function(type) {
+      var spans = $(type);
+      for ( var i = spans.length - 2; i >= 0; --i)
+      {
+         var span = spans[i];
+         var nextspan = spans[i + 1];
+
+         merge(span, nextspan);
+      }
+    },
+
+    merge: function(span, nextspan) {
+      var follower = span.nextSibling;
+      var concat = true;
+       while (follower && follower != nextspan)
+       {
+         if (follower.nodeName != '#text')
+         {
+           concat = false;
+           break;
+         }
+         var len = follower.data.trim().length;
+         if (len > 0)
+         {
+           concat = false;
+           break;
+         }
+
+         follower = follower.nextSibling;
+       }
+
+      if (concat)
+      {
+        $(span).text($(span).text() + " " + $(follower).text());
+        $(follower).remove();
+      }
     }
   }
 
