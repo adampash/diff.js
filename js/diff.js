@@ -190,7 +190,7 @@
         }
       }
 
-      str.replace(/\$spacebar\$/g, ' ')
+      str = str.replace(/\$spacebar\$/g, ' ')
 
       // this.merge_adjacent('del')
       // this.merge_adjacent('ins')
